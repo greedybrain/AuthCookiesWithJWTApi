@@ -28,6 +28,12 @@ gem 'rack-cors'
 # Fast JSONApi
 gem 'fast_jsonapi'
 
+#Jwt
+gem 'jwt'
+
+# Dotenv
+gem 'dotenv-rails', groups: [:development, :test]
+
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
