@@ -40,7 +40,7 @@ class Api::V1::SessionsController < ApplicationController
                 session.clear
                 render json: {
                      status: 200,
-                     logged_out: true
+                     logged_in: false
                 }
            end
 
