@@ -1,9 +1,10 @@
 class ApplicationController < ActionController::Base
         skip_before_action :verify_authenticity_token
-        helper_method :current_user
+        include ::ActionController::Cookies
+        helper_method :current_user, :check_if_logged_in, :encode_token, :decoded_token
 
         def encode_token(payload)
-                JWT.encode(payload, Rails.env(JWT_SECRET))
+                JWT.encode(payload, ENV['JWT_SECRET'])
         end
 
         def auth_header 
@@ -14,7 +15,7 @@ class ApplicationController < ActionController::Base
                 if auth_header
                         token = auth_header.split(' ')[1]
                         begin 
-                                JWT.decode(token, Rails.env(JWT_SECRET), true, algorithm: Rails.env(JWT_ALGO))
+                                JWT.decode(token, ENV['JWT_SECRET'], true, algorithm: ENV['JWT_ALGO'])
                         rescue JWT::DecodeError
                                 nil
                         end
@@ -22,21 +23,22 @@ class ApplicationController < ActionController::Base
         end
 
         def current_user 
-                if decoded_token
-                        user_id = decoded_token[0]['user_id']
-                        @current_user = User.find_by(session[:user_id])
-                        render json: {
-                                logged_in: true,
-                                user: @current_user
-                        }
-                else
-                        render json: {
-                                logged_in: false
-                        }
-                end
+                @current_user ||= User.find(session[:user_id]) if session[:user_id]
+                # if decoded_token
+                #         user_id = decoded_token[0]['user_id']
+                        
+                #         render json: {
+                #                 logged_in: true,
+                #                 user: @current_user
+                #         }
+                # else
+                #         render json: {
+                #                 logged_in: false
+                #         }
+                # end
         end
 
-        def logged_in
+        def check_if_logged_in
                 !!current_user
         end
 

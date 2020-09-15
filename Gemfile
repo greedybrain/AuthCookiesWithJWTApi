@@ -34,6 +34,8 @@ gem 'jwt'
 # Dotenv
 gem 'dotenv-rails', groups: [:development, :test]
 
+gem 'pry'
+
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
@@ -60,6 +62,8 @@ group :test do
   gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'webdrivers'
+
+
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
