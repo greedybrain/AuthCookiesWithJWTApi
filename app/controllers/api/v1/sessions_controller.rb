@@ -5,20 +5,16 @@ class Api::V1::SessionsController < ApplicationController
                         session[:user_id] = user.id 
                         created_jwt = encode_token(session[:user_id])
                         cookies.signed[:jwt] = { value: created_jwt, httponly: true, expires: 1.hour.from_now }
+                        # UserMailer.welcome_email(user).deliver_now
                         render json: {
                                 status: :created,
                                 logged_in: true,
                                 user: UserSerializer.new(user)
                         }
-                elsif user 
-                        render json: {
-                                status: 500,
-                                password_error: ["*Wrong Password!"],
-                        }
                 else
                         render json: {
                                 status: 500,
-                                email_error: ["*Email Not Found!"]
+                                error: "Incorrect username and/or password"
                         }
                 end
         end
